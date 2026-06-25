@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GM Food Assessoria — Cardápio digital com pedido pelo WhatsApp</title>
+  <meta name="description"
+    content="A GM Food Assessoria monta cardápios digitais para restaurantes, hamburguerias, pizzarias e delivery receberem pedidos organizados pelo WhatsApp, sem comissão por venda.">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23DC2626' d='M50 6C38 26 26 34 26 54c0 16 11 28 24 28s24-12 24-28c0-8-3-14-7-19 1 9-3 15-9 15-7 0-9-7-6-15C56 28 50 16 50 6Z'/%3E%3Cpath fill='%23F2C84B' d='M50 38c-3 8-9 12-9 21 0 8 5 14 11 14s11-6 11-14c0-4-1-7-3-9 0 4-2 7-5 7-3 0-4-3-3-6 1-5-1-9-2-13Z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <div class="legal-gate" id="legal-gate" hidden>
+    <div class="legal-gate-backdrop" aria-hidden="true"></div>
+    <section class="legal-gate-panel" role="dialog" aria-modal="true" aria-labelledby="legal-gate-title"
+      aria-describedby="legal-gate-desc">
+      <div class="legal-gate-brand">
+        <svg class="logo-flame" width="28" height="28" viewBox="0 0 100 100" aria-hidden="true">
+          <path fill="var(--red-600)"
+            d="M50 6C38 26 26 34 26 54c0 16 11 28 24 28s24-12 24-28c0-8-3-14-7-19 1 9-3 15-9 15-7 0-9-7-6-15C56 28 50 16 50 6Z" />
+          <path fill="var(--yellow-500)"
+            d="M50 38c-3 8-9 12-9 21 0 8 5 14 11 14s11-6 11-14c0-4-1-7-3-9 0 4-2 7-5 7-3 0-4-3-3-6 1-5-1-9-2-13Z" />
+        </svg>
+        <span>GM Food Assessoria</span>
+      </div>
+      <h2 id="legal-gate-title">Termos e Privacidade</h2>
+      <p id="legal-gate-desc">Para continuar navegando, leia e aceite os Termos de Uso e a Política de Privacidade. O
+        site ficará bloqueado até o aceite.</p>
+
+      <div class="legal-gate-scroll" tabindex="0">
+        <h3>Resumo objetivo</h3>
+        <p>A GM Food Assessoria usa este site para apresentar uma solução de cardápio digital e receber pedidos de
+          diagnóstico comercial. Ao enviar o formulário, você informa nome, negócio e e-mail, e pode abrir uma conversa
+          no WhatsApp com a mensagem pronta.</p>
+        <p>Seus dados devem ser usados apenas para responder ao contato, avaliar a necessidade do negócio, preparar
+          proposta e manter registro mínimo de atendimento. Não envie dados sensíveis, dados de cartão, senhas ou
+          informações confidenciais pelo formulário.</p>
+
+        <h3>Termos de Uso</h3>
+        <p>O conteúdo do site é informativo e não garante aumento de vendas, aprovação de integração, disponibilidade
+          permanente ou implantação automática. Valores, escopo, prazos, integrações, cancelamento e suporte devem ser
+          confirmados em proposta comercial antes da contratação.</p>
+        <p>Você se compromete a fornecer informações verdadeiras, usar o site de forma lícita e não tentar interferir no
+          funcionamento, segurança ou disponibilidade da página.</p>
+
+        <h3>Privacidade</h3>
+        <p>Tratamos dados pessoais conforme finalidade, necessidade, transparência e segurança. Você pode solicitar
+          confirmação de tratamento, acesso, correção, exclusão ou revogação do consentimento pelo canal de atendimento
+          indicado no site.</p>
+        <p>Podemos usar serviços de terceiros necessários ao funcionamento do site, como hospedagem, fontes, scripts de
+          interface e WhatsApp. Esses serviços podem processar dados técnicos, como endereço IP, navegador e registros
+          de acesso.</p>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-block" id="accept-legal">Aceito e quero continuar</button>
+      <p class="legal-gate-note">Aceite registrado neste navegador. Consulte os <a href="termos-privacidade.html#termos">documentos completos</a>.</p>
+    </section>
+  </div>
+
+  <header class="site-header" id="header">
+    <div class="header-inner">
+      <a href="#topo" class="logo" aria-label="GM Food Assessoria, página inicial">
+        <svg class="logo-flame" width="30" height="30" viewBox="0 0 100 100" aria-hidden="true">
+          <path fill="var(--red-600)"
+            d="M50 6C38 26 26 34 26 54c0 16 11 28 24 28s24-12 24-28c0-8-3-14-7-19 1 9-3 15-9 15-7 0-9-7-6-15C56 28 50 16 50 6Z" />
+          <path fill="var(--yellow-500)"
+            d="M50 38c-3 8-9 12-9 21 0 8 5 14 11 14s11-6 11-14c0-4-1-7-3-9 0 4-2 7-5 7-3 0-4-3-3-6 1-5-1-9-2-13Z" />
+        </svg>
+        <span class="logo-word">GM Food</span>
+      </a>
+
+      <nav class="main-nav" id="main-nav" aria-label="Navegação principal">
+        <ul>
+          <li><a href="#recursos">Recursos</a></li>
+          <li><a href="#como-funciona">Como funciona</a></li>
+          <li><a href="#planos">Planos</a></li>
+          <li><a href="#validacao">Validação</a></li>
+          <li><a href="#faq">Perguntas</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#demo" class="btn btn-ghost-light header-login">Ver demo</a>
+        <a href="#cta-final" class="btn btn-primary header-cta">Pedir diagnóstico</a>
+        <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-nav"
+          aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-nav" id="mobile-nav">
+      <ul>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#planos">Planos</a></li>
+        <li><a href="#validacao">Validação</a></li>
+        <li><a href="#faq">Perguntas</a></li>
+        <li><a href="#demo" class="btn btn-ghost">Ver demo</a></li>
+        <li><a href="#cta-final" class="btn btn-primary">Pedir diagnóstico</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="conteudo">
+
+    <!-- HERO -->
+    <section class="hero" id="topo">
+      <div class="hero-bg" aria-hidden="true">
+        <svg class="ember ember-a" viewBox="0 0 200 200">
+          <path
+            d="M100 10c-22 36-46 50-46 86 0 30 21 54 46 54s46-24 46-54c0-16-6-28-14-38 2 18-6 30-18 30-14 0-18-14-12-30C108 46 100 26 100 10Z" />
+        </svg>
+        <svg class="ember ember-b" viewBox="0 0 200 200">
+          <path
+            d="M100 10c-22 36-46 50-46 86 0 30 21 54 46 54s46-24 46-54c0-16-6-28-14-38 2 18-6 30-18 30-14 0-18-14-12-30C108 46 100 26 100 10Z" />
+        </svg>
+        <svg class="ember ember-c" viewBox="0 0 200 200">
+          <path
+            d="M100 10c-22 36-46 50-46 86 0 30 21 54 46 54s46-24 46-54c0-16-6-28-14-38 2 18-6 30-18 30-14 0-18-14-12-30C108 46 100 26 100 10Z" />
+        </svg>
+        <div class="grain"></div>
+      </div>
+
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <h1 class="hero-title">
+            <span class="line">Seu cardápio</span>
+            <span class="line"><mark>Pedidos claros</mark></span>
+            <span class="line">Zero comissão</span>
+          </h1>
+          <p class="hero-sub">
+            Tenha um cardápio digital bonito, fácil de atualizar e preparado para receber pedidos direto no
+            WhatsApp — sem comissão por venda e sem depender de cardápio em PDF desatualizado.
+          </p>
+          <div class="hero-actions">
+            <a href="#cta-final" class="btn btn-primary btn-lg">Pedir diagnóstico grátis</a>
+            <a href="#demo" class="btn btn-ghost-light btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 5v14l11-7L8 5Z" fill="currentColor" />
+              </svg>
+              Ver como funciona
+            </a>
+          </div>
+          <p class="hero-note">Diagnóstico grátis · sem cartão de crédito · proposta antes de contratar</p>
+        </div>
+
+        <div class="hero-visual" id="hero-visual">
+          <div class="phone-mock" id="phone-mock">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="menu-header">
+                <span class="menu-shop-name">Hamburgueria do Bairro</span>
+                <span class="menu-shop-status">Aberto agora</span>
+              </div>
+              <ul class="menu-items">
+                <li class="menu-item is-best">
+                  <div class="menu-item-thumb thumb-burger"></div>
+                  <div class="menu-item-info">
+                    <strong>Cheddar na Brasa</strong>
+                    <span>Pão brioche, blend 160g, cheddar e barbecue da casa</span>
+                  </div>
+                  <div class="menu-item-price">
+                    <span class="tag">Mais pedido</span>
+                    <span>R$ 28,90</span>
+                  </div>
+                </li>
+                <li class="menu-item">
+                  <div class="menu-item-thumb thumb-fries"></div>
+                  <div class="menu-item-info">
+                    <strong>Batata rústica</strong>
+                    <span>Porção generosa com alecrim e parmesão</span>
+                  </div>
+                  <div class="menu-item-price"><span>R$ 18,00</span></div>
+                </li>
+                <li class="menu-item">
+                  <div class="menu-item-thumb thumb-drink"></div>
+                  <div class="menu-item-info">
+                    <strong>Limonada suíça</strong>
+                    <span>500ml, feita na hora</span>
+                  </div>
+                  <div class="menu-item-price"><span>R$ 9,50</span></div>
+                </li>
+              </ul>
+              <div class="menu-cart">
+                <span>2 itens no carrinho</span>
+                <span class="menu-cart-total">R$ 46,90</span>
+              </div>
+            </div>
+            <span class="floating-pill pill-orders">+38 pedidos hoje</span>
+            <span class="floating-pill pill-rating">★ 4.9 de avaliação</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROOF STRIP -->
+    <section class="proof-strip" aria-label="Tipos de negócio que usam a GM Food Assessoria">
+      <div class="marquee">
+        <ul class="marquee-track">
+          <li>Restaurantes</li>
+          <li>Hamburguerias</li>
+          <li>Pizzarias</li>
+          <li>Cafeterias</li>
+          <li>Açaíterias</li>
+          <li>Food trucks</li>
+          <li>Docerias</li>
+          <li>Bares</li>
+          <li>Restaurantes</li>
+          <li>Hamburguerias</li>
+          <li>Pizzarias</li>
+          <li>Cafeterias</li>
+          <li>Açaíterias</li>
+          <li>Food trucks</li>
+          <li>Docerias</li>
+          <li>Bares</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RECURSOS -->
+    <section class="section" id="recursos">
+      <div class="section-inner">
+        <h2 class="section-title reveal">Tudo que seu cardápio precisa, <mark>num só lugar</mark></h2>
+        <p class="section-sub reveal">Sem mensalidade escondida em planilha, sem print desatualizado no grupo do
+          WhatsApp.</p>
+
+        <div class="bento">
+          <article class="bento-card bento-card--lg reveal">
+            <div class="bento-visual">
+              <div class="mini-card mini-card-1"></div>
+              <div class="mini-card mini-card-2"></div>
+              <div class="mini-card mini-card-3"></div>
+            </div>
+            <h3>Atualize em segundos, de qualquer lugar</h3>
+            <p>Mudou o preço do prato do dia ou acabou um item? Edite pelo celular e a mudança aparece para os clientes na
+              hora — sem precisar reimprimir nada.</p>
+          </article>
+
+          <article class="bento-card reveal">
+            <svg class="bento-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 4.5-7.79M3 4v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            <h3>Sempre no ar</h3>
+            <p>Seu cardápio carrega rápido e continua acessível mesmo em conexões fracas de internet.</p>
+          </article>
+
+          <article class="bento-card reveal">
+            <svg class="bento-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"
+                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+            </svg>
+            <h3>Pedido direto no WhatsApp</h3>
+            <p>O cliente monta o pedido e envia pronto para o seu número — você confirma e já manda para a cozinha.</p>
+          </article>
+
+          <article class="bento-card reveal">
+            <svg class="bento-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3.5l2.2 4.6 5 .7-3.6 3.6.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.6 5-.7L12 3.5Z" stroke="currentColor"
+                stroke-width="1.8" stroke-linejoin="round" />
+            </svg>
+            <h3>Destaque os mais pedidos</h3>
+            <p>Marque pratos como "mais pedido" ou "em promoção" e ajude o cliente a decidir mais rápido.</p>
+          </article>
+
+          <article class="bento-card bento-card--wide reveal">
+            <svg class="bento-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 19h16M7 15v4M12 9v10M17 5v14" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" />
+            </svg>
+            <h3>Base para decisões de cardápio</h3>
+            <p>Organize itens, preços e pedidos para enxergar padrões antes de investir em relatórios mais avançados.
+            </p>
+          </article>
+
+          <article class="bento-card reveal">
+            <svg class="bento-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3v3m0 12v3m9-9h-3M6 12H3m13.4-6.4-2.1 2.1M8.7 15.7l-2.1 2.1m0-11.4 2.1 2.1m6.6 6.6 2.1 2.1"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+            <h3>Sua marca, do seu jeito</h3>
+            <p>Cores, logo e fotos do seu negócio — o cardápio parece feito sob medida para a sua marca.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section section--ink" id="como-funciona">
+      <div class="section-inner">
+        <h2 class="section-title reveal">Do cardápio bagunçado ao pedido organizado em 3 passos</h2>
+        <p class="section-sub reveal">Sem precisar entender nada de tecnologia.</p>
+
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step-number">1</span>
+            <h3>Monte seu cardápio</h3>
+            <p>Reunimos seus pratos, fotos, preços e categorias para montar uma primeira versão clara do cardápio.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step-number">2</span>
+            <h3>Compartilhe o link do seu cardápio</h3>
+            <p>Coloque na bio do Instagram, no status do WhatsApp ou na fachada da loja. O cliente abre sem precisar
+              instalar nada.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step-number">3</span>
+            <h3>Receba pedidos e venda mais</h3>
+            <p>O cliente escolhe os itens e envia o pedido formatado para seu WhatsApp, pronto para conferência.</p>
+          </li>
+        </ol>
+        <svg class="steps-path" viewBox="0 0 1000 80" preserveAspectRatio="none" aria-hidden="true">
+          <path id="steps-path-line" d="M40 40 C 300 40, 350 10, 500 40 S 700 70, 960 40" />
+        </svg>
+      </div>
+    </section>
+
+    <!-- DEMO / SHOWCASE -->
+    <section class="section" id="demo">
+      <div class="section-inner">
+        <h2 class="section-title reveal">Um cardápio que parece feito por uma agência</h2>
+        <p class="section-sub reveal">Veja como o cliente navega, escolhe itens e envia o pedido para o atendimento.</p>
+
+        <div class="showcase reveal">
+          <div class="showcase-tabs" role="tablist" aria-label="Telas do produto">
+            <button class="showcase-tab is-active" id="tab-btn-cardapio" role="tab" aria-selected="true"
+              aria-controls="tab-cardapio" data-target="tab-cardapio">Cardápio</button>
+            <button class="showcase-tab" id="tab-btn-pedidos" role="tab" aria-selected="false"
+              aria-controls="tab-pedidos" tabindex="-1" data-target="tab-pedidos">Pedidos</button>
+            <button class="showcase-tab" id="tab-btn-painel" role="tab" aria-selected="false" aria-controls="tab-painel"
+              tabindex="-1" data-target="tab-painel">Operação</button>
+          </div>
+
+          <div class="showcase-panel" id="tab-cardapio" role="tabpanel" aria-labelledby="tab-btn-cardapio">
+            <div class="browser-frame">
+              <div class="browser-bar"><span></span><span></span><span></span>
+                <div class="browser-url">gmfood.com.br/hamburgueria-do-bairro</div>
+              </div>
+              <div class="browser-body cardapio-preview">
+                <div class="cp-row">
+                  <div class="cp-thumb thumb-burger"></div>
+                  <div class="cp-text"><strong>Cheddar na Brasa</strong><span>R$ 28,90</span></div>
+                </div>
+                <div class="cp-row">
+                  <div class="cp-thumb thumb-pizza"></div>
+                  <div class="cp-text"><strong>Pizza Calabresa</strong><span>R$ 42,00</span></div>
+                </div>
+                <div class="cp-row">
+                  <div class="cp-thumb thumb-drink"></div>
+                  <div class="cp-text"><strong>Limonada suíça</strong><span>R$ 9,50</span></div>
+                </div>
+                <div class="cp-row">
+                  <div class="cp-thumb thumb-dessert"></div>
+                  <div class="cp-text"><strong>Petit gâteau</strong><span>R$ 16,90</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="showcase-panel" id="tab-pedidos" role="tabpanel" aria-labelledby="tab-btn-pedidos" hidden>
+            <div class="browser-frame">
+              <div class="browser-bar"><span></span><span></span><span></span>
+                <div class="browser-url">gmfood.com.br/pedidos</div>
+              </div>
+              <div class="browser-body pedidos-preview">
+                <div class="order-row"><span class="order-id">#142</span><span>Pedido 4 · 2 itens</span><span
+                    class="order-status status-new">Novo</span></div>
+                <div class="order-row"><span class="order-id">#141</span><span>Retirada · 1 item</span><span
+                    class="order-status status-prep">Em preparo</span></div>
+                <div class="order-row"><span class="order-id">#140</span><span>Entrega · 3 itens</span><span
+                    class="order-status status-done">Pronto</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="showcase-panel" id="tab-painel" role="tabpanel" aria-labelledby="tab-btn-painel" hidden>
+            <div class="browser-frame">
+              <div class="browser-bar"><span></span><span></span><span></span>
+                <div class="browser-url">gmfood.com.br/operacao</div>
+              </div>
+              <div class="browser-body painel-preview">
+                <p class="painel-privacy">Visão simples para conferir demanda</p>
+                <div class="bars">
+                  <div class="bar" style="--h:38%"></div>
+                  <div class="bar" style="--h:62%"></div>
+                  <div class="bar" style="--h:48%"></div>
+                  <div class="bar" style="--h:80%"></div>
+                  <div class="bar" style="--h:55%"></div>
+                  <div class="bar" style="--h:70%"></div>
+                  <div class="bar" style="--h:90%"></div>
+                </div>
+                <p class="painel-caption">Padrão de pedidos · ajuste cardápio e estoque</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLANOS -->
+    <section class="section section--yellow" id="planos">
+      <div class="section-inner">
+        <h2 class="section-title reveal">Planos sem letra miúda</h2>
+        <p class="section-sub reveal">Comece com uma implantação simples e evolua quando o fluxo de pedidos estiver
+          validado.</p>
+
+        <div class="billing-toggle reveal">
+          <span class="billing-label is-active" data-period="mensal">Mensal</span>
+          <button class="switch" id="billing-switch" role="switch" aria-checked="false"
+            aria-label="Alternar entre cobrança mensal e anual">
+            <span class="switch-knob"></span>
+          </button>
+          <span class="billing-label" data-period="anual">Anual <span class="badge">economia na implantação</span></span>
+        </div>
+
+        <div class="pricing-grid pricing-grid--duo">
+          <article class="price-card price-card--highlight reveal">
+            <span class="price-tag">Mais escolhido</span>
+            <h3>Profissional</h3>
+            <p class="price-desc">Para validar pedido pelo WhatsApp com cardápio profissional</p>
+            <p class="price-amount"><span class="amount" data-monthly="49" data-yearly="41">R$ 49</span><span
+                class="period">/mês após implantação</span></p>
+            <ul class="price-features">
+              <li>1 link compartilhável</li>
+              <li>Itens ilimitados no cardápio</li>
+              <li>Link compartilhável com sua marca</li>
+              <li>Pedido formatado para WhatsApp</li>
+              <li>Ajustes iniciais assistidos</li>
+            </ul>
+            <a href="#cta-final" class="btn btn-primary btn-block">Pedir diagnóstico grátis</a>
+          </article>
+
+          <article class="price-card reveal">
+            <h3>Rede</h3>
+            <p class="price-desc">Para quem precisa de domínio, múltiplas unidades e integrações</p>
+            <p class="price-amount"><span class="amount" data-monthly="149" data-yearly="124">R$ 149</span><span
+                class="period">/mês</span></p>
+            <ul class="price-features">
+              <li>Múltiplas unidades e filiais</li>
+              <li>Usuários e permissões por equipe</li>
+              <li>Integrações sob análise técnica</li>
+              <li>Acompanhamento de implantação</li>
+            </ul>
+            <a href="#cta-final" class="btn btn-ghost btn-block">Planejar implantação</a>
+          </article>
+        </div>
+        <p class="pricing-note reveal">Nenhum plano cobra comissão sobre suas vendas. Apps de delivery podem continuar
+          trazendo demanda; aqui o foco é organizar pedidos diretos e clientes recorrentes.</p>
+      </div>
+    </section>
+
+    <!-- VALIDACAO -->
+    <section class="section section--ink" id="validacao">
+      <div class="section-inner">
+        <h2 class="section-title reveal">Antes de prometer aumento de venda, valide o básico</h2>
+        <p class="section-sub reveal">O cardápio digital não substitui marketplace de delivery. Ele organiza pedidos
+          diretos, reduz atrito no WhatsApp e cria uma base para vender melhor para quem já conhece sua marca.</p>
+
+        <div class="validation-grid">
+          <article class="validation-card reveal">
+            <span class="validation-kicker">Problema real</span>
+            <h3>Pedido perdido em conversa</h3>
+            <p>Cliente manda item, sabor, endereço e observação em mensagens separadas. O atendimento precisa conferir
+              tudo manualmente.</p>
+          </article>
+          <article class="validation-card reveal">
+            <span class="validation-kicker">Primeira solução</span>
+            <h3>Pedido formatado no WhatsApp</h3>
+            <p>O cliente escolhe no cardápio e envia uma mensagem organizada, com itens e valores, para sua equipe
+              confirmar.</p>
+          </article>
+          <article class="validation-card reveal">
+            <span class="validation-kicker">Próximo passo</span>
+            <h3>Prova com clientes reais</h3>
+            <p>Depois dos primeiros pedidos, use prints autorizados, métricas e feedbacks reais no lugar de promessas
+              genéricas.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="section-inner section-inner--narrow">
+        <h2 class="section-title reveal">Perguntas frequentes</h2>
+
+        <div class="accordion">
+          <div class="accordion-item reveal">
+            <button class="accordion-trigger" aria-expanded="true">
+              Preciso saber programar para criar meu cardápio?
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="accordion-panel" style="--max:200px">
+              <p>Não. Você monta tudo por um editor visual: adiciona fotos, preços e categorias clicando, sem escrever
+                nenhuma linha de código.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item reveal">
+            <button class="accordion-trigger" aria-expanded="false">
+              Meus clientes pagam alguma comissão por pedido?
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="accordion-panel">
+              <p>Não. A GM Food Assessoria cobra uma mensalidade fixa do seu negócio, e você fica com 100% do valor de
+                cada venda — diferente dos apps de delivery que cobram comissão por pedido.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item reveal">
+            <button class="accordion-trigger" aria-expanded="false">
+              Posso usar meu próprio domínio?
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="accordion-panel">
+              <p>Sim, a partir do plano Profissional. Você pode usar algo como cardapio.suaempresa.com.br ou um domínio
+                próprio que você já tenha.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item reveal">
+            <button class="accordion-trigger" aria-expanded="false">
+              O cardápio funciona bem no celular?
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="accordion-panel">
+              <p>Sim. A experiência deve ser pensada primeiro para celular, porque é onde a maioria dos clientes abre o
+                link vindo do Instagram, QR code ou WhatsApp.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item reveal">
+            <button class="accordion-trigger" aria-expanded="false">
+              Posso cancelar quando quiser?
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="accordion-panel">
+              <p>Sim, sem fidelidade. Os detalhes de cancelamento e prazos devem ficar claros na proposta antes da
+                contratação.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item reveal">
+            <button class="accordion-trigger" aria-expanded="false">
+              Como os pedidos chegam até mim?
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="accordion-panel">
+              <p>Direto no seu WhatsApp, já formatado para conferência. Painel e integrações podem ser planejados
+                conforme a operação pedir.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-final" id="cta-final">
+      <div class="hero-bg" aria-hidden="true">
+        <svg class="ember ember-a" viewBox="0 0 200 200">
+          <path
+            d="M100 10c-22 36-46 50-46 86 0 30 21 54 46 54s46-24 46-54c0-16-6-28-14-38 2 18-6 30-18 30-14 0-18-14-12-30C108 46 100 26 100 10Z" />
+        </svg>
+        <svg class="ember ember-c" viewBox="0 0 200 200">
+          <path
+            d="M100 10c-22 36-46 50-46 86 0 30 21 54 46 54s46-24 46-54c0-16-6-28-14-38 2 18-6 30-18 30-14 0-18-14-12-30C108 46 100 26 100 10Z" />
+        </svg>
+      </div>
+      <div class="section-inner cta-final-inner">
+        <h2 class="reveal">Descubra se esse cardápio faz sentido para sua operação</h2>
+        <p class="reveal">Envie seus dados e abra uma conversa no WhatsApp com as informações básicas do seu negócio.
+        </p>
+        <form class="signup-form reveal" id="signup-form" novalidate>
+          <label for="name" class="visually-hidden">Seu nome</label>
+          <input type="text" id="name" name="name" placeholder="Seu nome" autocomplete="name" required>
+          <label for="business" class="visually-hidden">Nome do negócio</label>
+          <input type="text" id="business" name="business" placeholder="Nome do negócio" autocomplete="organization"
+            required>
+          <label for="email" class="visually-hidden">Seu e-mail</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@negocio.com.br" autocomplete="email"
+            required>
+          <button type="submit" class="btn btn-primary">Abrir conversa</button>
+          <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+</main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#topo" class="logo">
+          <svg class="logo-flame" width="26" height="26" viewBox="0 0 100 100" aria-hidden="true">
+            <path fill="var(--red-500)"
+              d="M50 6C38 26 26 34 26 54c0 16 11 28 24 28s24-12 24-28c0-8-3-14-7-19 1 9-3 15-9 15-7 0-9-7-6-15C56 28 50 16 50 6Z" />
+            <path fill="var(--yellow-500)"
+              d="M50 38c-3 8-9 12-9 21 0 8 5 14 11 14s11-6 11-14c0-4-1-7-3-9 0 4-2 7-5 7-3 0-4-3-3-6 1-5-1-9-2-13Z" />
+          </svg>
+          <span class="logo-word">GM Food</span>
+        </a>
+        <p>GM Food Assessoria — cardápio digital para organizar pedidos diretos pelo WhatsApp.</p>
+        <div class="social-links">
+          <a href="#cta-final" aria-label="Falar com a GM Food Assessoria sobre Instagram"><svg viewBox="0 0 24 24"
+              fill="none">
+              <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
+            </svg></a>
+          <a href="#cta-final" aria-label="Falar com a GM Food Assessoria no WhatsApp"><svg viewBox="0 0 24 24"
+              fill="none">
+              <path d="M3 21l1.5-4.5A8.5 8.5 0 1 1 8 19.7L3 21Z" stroke="currentColor" stroke-width="1.8"
+                stroke-linejoin="round" />
+              <path d="M8.5 9.7c.3 2.6 2.5 4.8 5.1 5.1" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" />
+            </svg></a>
+          <a href="#cta-final" aria-label="Falar com a GM Food Assessoria sobre LinkedIn"><svg viewBox="0 0 24 24"
+              fill="none">
+              <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8" />
+              <path d="M8 11v5M8 8v.01M12 16v-3.5c0-1.5 1-2.5 2.3-2.5 1.2 0 1.7 1 1.7 2.5V16" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" />
+            </svg></a>
+        </div>
+      </div>
+
+      <nav class="footer-col" aria-label="Produto">
+        <h4>Produto</h4>
+        <ul>
+          <li><a href="#recursos">Recursos</a></li>
+          <li><a href="#planos">Planos</a></li>
+          <li><a href="#demo">Demonstração</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-label="Empresa">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#validacao">Validação</a></li>
+          <li><a href="#demo">Demo</a></li>
+          <li><a href="#cta-final">Contato</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-label="Suporte">
+        <h4>Suporte</h4>
+        <ul>
+          <li><a href="#faq">Perguntas frequentes</a></li>
+          <li><a href="#cta-final">Diagnóstico</a></li>
+          <li><a href="#cta-final">Planejar implantação</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> GM Food Assessoria. Todos os direitos reservados.</p>
+      <div class="footer-legal"><a href="termos-privacidade.html#termos">Termos</a><a href="termos-privacidade.html#privacidade">Privacidade</a></div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
